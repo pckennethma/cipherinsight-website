@@ -52,7 +52,7 @@ const awards = [
   },
   {
     title: 'IEEE S&P Distinguished Paper Award',
-    detail: 'Premier computer security conference',
+    detail: 'One of the most prestigious awards in computer security',
     iconBg: 'bg-red-500/20',
     iconColor: 'text-red-400',
     detailColor: 'text-red-400',
