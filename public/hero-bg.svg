@@ -1,53 +1,52 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" style="background-color: #0f172a; overflow: hidden;">
   <defs>
-    <linearGradient id="traceGenBlue" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0" />
-      <stop offset="50%" stop-color="#0ea5e9" stop-opacity="0.8" />
-      <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0" />
-    </linearGradient>
-    <linearGradient id="traceGenPurple" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#8b5cf6" stop-opacity="0" />
-      <stop offset="50%" stop-color="#8b5cf6" stop-opacity="0.8" />
-      <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0" />
-    </linearGradient>
-    
     <style>
-      .base-trace { fill: none; stroke: rgba(255, 255, 255, 0.05); stroke-width: 1; }
-      .data-packet { fill: none; stroke-width: 2; stroke-linecap: round; }
+      .node { fill: #0ea5e9; animation: pulseNode 4s infinite alternate ease-in-out; }
+      .node-alt { fill: #8b5cf6; animation: pulseNode 5s infinite alternate-reverse ease-in-out; }
+      .line { stroke: rgba(14, 165, 233, 0.15); stroke-width: 1; stroke-dasharray: 4 4; animation: flowData 20s linear infinite; }
+      .line-alt { stroke: rgba(139, 92, 246, 0.15); stroke-width: 1; stroke-dasharray: 10 5; animation: flowData 15s linear infinite reverse; }
+      .glow-pulse { fill: transparent; stroke: #0ea5e9; stroke-width: 2; opacity: 0; animation: signal 6s infinite ease-out; }
+      
+      @keyframes pulseNode {
+        0% { transform: scale(0.8); opacity: 0.3; }
+        100% { transform: scale(1.2); opacity: 0.7; }
+      }
+      @keyframes flowData {
+        0% { stroke-dashoffset: 0; }
+        100% { stroke-dashoffset: 200; }
+      }
+      @keyframes signal {
+        0% { r: 0; opacity: 0.8; }
+        50% { opacity: 0.2; }
+        100% { r: 60; opacity: 0; }
+      }
     </style>
   </defs>
 
-  <g transform="skewX(-15) opacity(0.8)">
+  <!-- Network Layer -->
+  <g opacity="0.4">
+    <!-- Connections -->
+    <path d="M 120 200 L 450 350 L 800 150 L 1200 450 L 1700 300" class="line" />
+    <path d="M 250 800 L 550 650 L 900 850 L 1400 600 L 1800 800" class="line-alt" />
+    <path d="M 450 350 L 550 650" class="line" />
+    <path d="M 800 150 L 900 850" class="line-alt" />
+    <path d="M 1200 450 L 1400 600" class="line" />
     
-    <!-- Path 1 -->
-    <path id="circuit1" d="M -100 200 L 400 200 L 500 300 L 1500 300 L 1600 400 L 2100 400" class="base-trace" />
-    <use href="#circuit1" class="data-packet" stroke="url(#traceGenBlue)" stroke-dasharray="150 2500">
-      <animate attributeName="stroke-dashoffset" from="2500" to="-150" dur="8s" repeatCount="indefinite" />
-    </use>
+    <!-- Vertical Cross-links -->
+    <path d="M 100 -50 L 120 200 L 250 800 L 300 1150" class="line" stroke-width="0.5" />
+    <path d="M 800 -50 L 800 150 L 550 650 L 600 1150" class="line-alt" stroke-width="0.5" />
+    <path d="M 1600 -50 L 1700 300 L 1800 800 L 1750 1150" class="line" stroke-width="0.5" />
 
-    <!-- Path 2 -->
-    <path id="circuit2" d="M -100 800 L 300 800 L 450 650 L 1200 650 L 1300 550 L 2100 550" class="base-trace" />
-    <use href="#circuit2" class="data-packet" stroke="url(#traceGenPurple)" stroke-dasharray="200 2200">
-      <animate attributeName="stroke-dashoffset" from="2200" to="-200" dur="11s" repeatCount="indefinite" />
-    </use>
-
-    <!-- Path 3 -->
-    <path id="circuit3" d="M 600 -100 L 600 400 L 700 500 L 700 900 L 850 1050 L 850 1200" class="base-trace" />
-    <use href="#circuit3" class="data-packet" stroke="url(#traceGenBlue)" stroke-dasharray="100 1800">
-      <animate attributeName="stroke-dashoffset" from="-100" to="1800" dur="9s" repeatCount="indefinite" />
-    </use>
-    
-    <!-- Path 4 -->
-    <path id="circuit4" d="M 1700 1200 L 1700 800 L 1600 700 L 1600 200 L 1450 50 L 1450 -100" class="base-trace" />
-    <use href="#circuit4" class="data-packet" stroke="url(#traceGenPurple)" stroke-dasharray="120 1800">
-      <animate attributeName="stroke-dashoffset" from="1800" to="-120" dur="7s" repeatCount="indefinite" />
-    </use>
-
-    <!-- Static endpoint markers representing data encryption locks -->
-    <circle cx="400" cy="200" r="3" fill="#0ea5e9" opacity="0.3" />
-    <circle cx="500" cy="300" r="3" fill="#0ea5e9" opacity="0.3" />
-    <circle cx="300" cy="800" r="3" fill="#8b5cf6" opacity="0.3" />
-    <circle cx="450" cy="650" r="3" fill="#8b5cf6" opacity="0.3" />
-    
+    <!-- Nodes -->
+    <g transform="translate(120, 200)"><circle r="4" class="node" /><circle class="glow-pulse" style="animation-delay: 0s;" /></g>
+    <g transform="translate(450, 350)"><circle r="5" class="node-alt" /></g>
+    <g transform="translate(800, 150)"><circle r="3" class="node" /></g>
+    <g transform="translate(1200, 450)"><circle r="6" class="node-alt" /><circle class="glow-pulse" style="animation-delay: 2s;" /></g>
+    <g transform="translate(1700, 300)"><circle r="4" class="node" /></g>
+    <g transform="translate(250, 800)"><circle r="3" class="node-alt" /></g>
+    <g transform="translate(550, 650)"><circle r="5" class="node" /><circle class="glow-pulse" style="animation-delay: 4s;" /></g>
+    <g transform="translate(900, 850)"><circle r="4" class="node-alt" /></g>
+    <g transform="translate(1400, 600)"><circle r="3" class="node" /></g>
+    <g transform="translate(1800, 800)"><circle r="5" class="node-alt" /><circle class="glow-pulse" style="animation-delay: 1s;" /></g>
   </g>
 </svg>
