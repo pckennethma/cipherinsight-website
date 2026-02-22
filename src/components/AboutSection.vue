@@ -24,13 +24,15 @@
             <div class="flex -space-x-3">
               <!-- Pingchuan -->
               <div class="relative w-12 h-12">
-                <img 
-                  v-if="hasPhoto('pingchuan')"
-                  :src="getPhotoUrl('pingchuan')" 
-                  alt="Prof. Pingchuan Ma"
-                  class="w-full h-full rounded-full object-cover border-2 border-slate-900"
-                  @error="onPhotoError('pingchuan')"
-                >
+                <picture v-if="hasPhoto('pingchuan')">
+                  <source :srcset="getPhotoUrl('pingchuan', 'webp')" type="image/webp">
+                  <img 
+                    :src="getPhotoUrl('pingchuan', 'jpg')" 
+                    alt="Prof. Pingchuan Ma"
+                    class="w-full h-full rounded-full object-cover border-2 border-slate-900"
+                    @error="onPhotoError('pingchuan')"
+                  >
+                </picture>
                 <div 
                   v-else
                   class="w-full h-full rounded-full bg-primary-600 flex items-center justify-center border-2 border-slate-900 text-sm font-bold"
@@ -40,13 +42,15 @@
               </div>
               <!-- Shuai -->
               <div class="relative w-12 h-12">
-                <img 
-                  v-if="hasPhoto('shuai')"
-                  :src="getPhotoUrl('shuai')" 
-                  alt="Prof. Shuai Wang"
-                  class="w-full h-full rounded-full object-cover border-2 border-slate-900"
-                  @error="onPhotoError('shuai')"
-                >
+                <picture v-if="hasPhoto('shuai')">
+                  <source :srcset="getPhotoUrl('shuai', 'webp')" type="image/webp">
+                  <img 
+                    :src="getPhotoUrl('shuai', 'jpg')" 
+                    alt="Prof. Shuai Wang"
+                    class="w-full h-full rounded-full object-cover border-2 border-slate-900"
+                    @error="onPhotoError('shuai')"
+                  >
+                </picture>
                 <div 
                   v-else
                   class="w-full h-full rounded-full bg-accent-600 flex items-center justify-center border-2 border-slate-900 text-sm font-bold"
@@ -56,13 +60,15 @@
               </div>
               <!-- Zongjie -->
               <div class="relative w-12 h-12">
-                <img 
-                  v-if="hasPhoto('zongjie')"
-                  :src="getPhotoUrl('zongjie')" 
-                  alt="Dr. Zongjie Li"
-                  class="w-full h-full rounded-full object-cover border-2 border-slate-900"
-                  @error="onPhotoError('zongjie')"
-                >
+                <picture v-if="hasPhoto('zongjie')">
+                  <source :srcset="getPhotoUrl('zongjie', 'webp')" type="image/webp">
+                  <img 
+                    :src="getPhotoUrl('zongjie', 'jpg')" 
+                    alt="Dr. Zongjie Li"
+                    class="w-full h-full rounded-full object-cover border-2 border-slate-900"
+                    @error="onPhotoError('zongjie')"
+                  >
+                </picture>
                 <div 
                   v-else
                   class="w-full h-full rounded-full bg-green-600 flex items-center justify-center border-2 border-slate-900 text-sm font-bold"
@@ -101,23 +107,25 @@ import { ref, onMounted } from 'vue'
 // Track which photos failed to load
 const failedPhotos = ref<Set<string>>(new Set())
 
-// Check if photo file exists (by trying to fetch it)
+// Check if photo file exists
 onMounted(async () => {
   const founders = ['pingchuan', 'shuai', 'zongjie']
   for (const founder of founders) {
     try {
-      const response = await fetch(getPhotoUrl(founder), { method: 'HEAD' })
+      const response = await fetch(getPhotoUrl(founder, 'webp'), { method: 'HEAD' })
       if (!response.ok) {
-        failedPhotos.value.add(founder)
+        const jpgResponse = await fetch(getPhotoUrl(founder, 'jpg'), { method: 'HEAD' })
+        if (!jpgResponse.ok) {
+          failedPhotos.value.add(founder)
+        }
       }
     } catch {
-      // If fetch fails (network error, etc.), assume photo doesn't exist
       failedPhotos.value.add(founder)
     }
   }
 })
 
-const getPhotoUrl = (founder: string) => `/founders/${founder}.jpg`
+const getPhotoUrl = (founder: string, format: 'webp' | 'jpg') => `/founders/${founder}.${format}`
 
 const hasPhoto = (founder: string) => !failedPhotos.value.has(founder)
 
