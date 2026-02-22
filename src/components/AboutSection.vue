@@ -19,12 +19,57 @@
             we minimize security risks and streamline analytics for regulated industries.
           </p>
           
-          <!-- Team Preview -->
+          <!-- Team Preview with Photos -->
           <div class="flex items-center space-x-4">
             <div class="flex -space-x-3">
-              <div class="w-12 h-12 rounded-full bg-primary-600 flex items-center justify-center border-2 border-slate-900 text-sm font-bold">PM</div>
-              <div class="w-12 h-12 rounded-full bg-accent-600 flex items-center justify-center border-2 border-slate-900 text-sm font-bold">SW</div>
-              <div class="w-12 h-12 rounded-full bg-green-600 flex items-center justify-center border-2 border-slate-900 text-sm font-bold">ZL</div>
+              <!-- Pingchuan -->
+              <div class="relative w-12 h-12">
+                <img 
+                  v-if="hasPhoto('pingchuan')"
+                  :src="getPhotoUrl('pingchuan')" 
+                  alt="Prof. Pingchuan Ma"
+                  class="w-full h-full rounded-full object-cover border-2 border-slate-900"
+                  @error="onPhotoError('pingchuan')"
+                >
+                <div 
+                  v-else
+                  class="w-full h-full rounded-full bg-primary-600 flex items-center justify-center border-2 border-slate-900 text-sm font-bold"
+                >
+                  PM
+                </div>
+              </div>
+              <!-- Shuai -->
+              <div class="relative w-12 h-12">
+                <img 
+                  v-if="hasPhoto('shuai')"
+                  :src="getPhotoUrl('shuai')" 
+                  alt="Prof. Shuai Wang"
+                  class="w-full h-full rounded-full object-cover border-2 border-slate-900"
+                  @error="onPhotoError('shuai')"
+                >
+                <div 
+                  v-else
+                  class="w-full h-full rounded-full bg-accent-600 flex items-center justify-center border-2 border-slate-900 text-sm font-bold"
+                >
+                  SW
+                </div>
+              </div>
+              <!-- Zongjie -->
+              <div class="relative w-12 h-12">
+                <img 
+                  v-if="hasPhoto('zongjie')"
+                  :src="getPhotoUrl('zongjie')" 
+                  alt="Dr. Zongjie Li"
+                  class="w-full h-full rounded-full object-cover border-2 border-slate-900"
+                  @error="onPhotoError('zongjie')"
+                >
+                <div 
+                  v-else
+                  class="w-full h-full rounded-full bg-green-600 flex items-center justify-center border-2 border-slate-900 text-sm font-bold"
+                >
+                  ZL
+                </div>
+              </div>
             </div>
             <div class="text-sm text-slate-400">
               <span class="text-white font-medium">3 Co-Founders</span><br>
@@ -51,6 +96,35 @@
 </template>
 
 <script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
+// Track which photos failed to load
+const failedPhotos = ref<Set<string>>(new Set())
+
+// Check if photo file exists (by trying to fetch it)
+onMounted(async () => {
+  const founders = ['pingchuan', 'shuai', 'zongjie']
+  for (const founder of founders) {
+    try {
+      const response = await fetch(getPhotoUrl(founder), { method: 'HEAD' })
+      if (!response.ok) {
+        failedPhotos.value.add(founder)
+      }
+    } catch {
+      // If fetch fails (network error, etc.), assume photo doesn't exist
+      failedPhotos.value.add(founder)
+    }
+  }
+})
+
+const getPhotoUrl = (founder: string) => `/founders/${founder}.jpg`
+
+const hasPhoto = (founder: string) => !failedPhotos.value.has(founder)
+
+const onPhotoError = (founder: string) => {
+  failedPhotos.value.add(founder)
+}
+
 const features = [
   {
     title: 'Absolute Privacy',
