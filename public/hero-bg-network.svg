@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" style="background-color: #0f172a; overflow: hidden;">
+  <defs>
+    <style>
+      .node { fill: #0ea5e9; animation: pulseNode 4s infinite alternate ease-in-out; }
+      .node-alt { fill: #8b5cf6; animation: pulseNode 5s infinite alternate-reverse ease-in-out; }
+      .line { stroke: rgba(14, 165, 233, 0.15); stroke-width: 1; stroke-dasharray: 4 4; animation: flowData 20s linear infinite; }
+      .line-alt { stroke: rgba(139, 92, 246, 0.15); stroke-width: 1; stroke-dasharray: 10 5; animation: flowData 15s linear infinite reverse; }
+      .glow-pulse { fill: transparent; stroke: #0ea5e9; stroke-width: 2; opacity: 0; animation: signal 6s infinite ease-out; }
+      
+      @keyframes pulseNode {
+        0% { transform: scale(0.8); opacity: 0.3; }
+        100% { transform: scale(1.2); opacity: 0.7; }
+      }
+      @keyframes flowData {
+        0% { stroke-dashoffset: 0; }
+        100% { stroke-dashoffset: 200; }
+      }
+      @keyframes signal {
+        0% { r: 0; opacity: 0.8; }
+        50% { opacity: 0.2; }
+        100% { r: 60; opacity: 0; }
+      }
+    </style>
+  </defs>
+
+  <!-- Network Layer -->
+  <g opacity="0.4">
+    <!-- Connections -->
+    <path d="M 120 200 L 450 350 L 800 150 L 1200 450 L 1700 300" class="line" />
+    <path d="M 250 800 L 550 650 L 900 850 L 1400 600 L 1800 800" class="line-alt" />
+    <path d="M 450 350 L 550 650" class="line" />
+    <path d="M 800 150 L 900 850" class="line-alt" />
+    <path d="M 1200 450 L 1400 600" class="line" />
+    
+    <!-- Vertical Cross-links -->
+    <path d="M 100 -50 L 120 200 L 250 800 L 300 1150" class="line" stroke-width="0.5" />
+    <path d="M 800 -50 L 800 150 L 550 650 L 600 1150" class="line-alt" stroke-width="0.5" />
+    <path d="M 1600 -50 L 1700 300 L 1800 800 L 1750 1150" class="line" stroke-width="0.5" />
+
+    <!-- Nodes -->
+    <g transform="translate(120, 200)"><circle r="4" class="node" /><circle class="glow-pulse" style="animation-delay: 0s;" /></g>
+    <g transform="translate(450, 350)"><circle r="5" class="node-alt" /></g>
+    <g transform="translate(800, 150)"><circle r="3" class="node" /></g>
+    <g transform="translate(1200, 450)"><circle r="6" class="node-alt" /><circle class="glow-pulse" style="animation-delay: 2s;" /></g>
+    <g transform="translate(1700, 300)"><circle r="4" class="node" /></g>
+    <g transform="translate(250, 800)"><circle r="3" class="node-alt" /></g>
+    <g transform="translate(550, 650)"><circle r="5" class="node" /><circle class="glow-pulse" style="animation-delay: 4s;" /></g>
+    <g transform="translate(900, 850)"><circle r="4" class="node-alt" /></g>
+    <g transform="translate(1400, 600)"><circle r="3" class="node" /></g>
+    <g transform="translate(1800, 800)"><circle r="5" class="node-alt" /><circle class="glow-pulse" style="animation-delay: 1s;" /></g>
+  </g>
+</svg>
